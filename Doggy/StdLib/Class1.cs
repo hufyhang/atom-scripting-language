@@ -100,7 +100,7 @@ namespace StdLib
             }
             else
             {
-                temp = temp.Substring(1, temp.Length - 1);
+                temp = temp.Substring(1, temp.Length - 2);
             }
             try
             {
@@ -110,7 +110,12 @@ namespace StdLib
             }
             catch (Exception)
             {
-                Console.WriteLine("ERROR: Cannot read \"" + temp + "\"!");
+                Console.Title = "Atom -- ERROR";
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\nOops! Atom has detected an error occured in your source file.");
+                Console.WriteLine("> FILESTREAM ERROR: " + line + " <");
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Environment.Exit(0);
             }
         }
     }

@@ -149,46 +149,58 @@ namespace Doggy.main
 
         public void translate(String line, VariableLib.VariableLib vars)
         {
-            if (line[0] != '.')
+            try
             {
-                switch (line.Substring(0, line.IndexOf(" ")))
+                if (line[0] != '.' && line.Length != 0)
                 {
-                    case "show":
-                        new StdLib.StdLib(line, vars).Show();
-                        break;
+                    switch (line.Substring(0, line.IndexOf(" ")))
+                    {
+                        case "show":
+                            new StdLib.StdLib(line, vars).Show();
+                            break;
 
-                    case "showln":
-                        new StdLib.StdLib(line, vars).Showln();
-                        break;
+                        case "showln":
+                            new StdLib.StdLib(line, vars).Showln();
+                            break;
 
-                    case "loop":
-                        this.Loop(line, this.innerLoop, true, vars);
-                        break;
+                        case "loop":
+                            this.Loop(line, this.innerLoop, true, vars);
+                            break;
 
-                    case "if":
-                        this.condition(line);
-                        break;
+                        case "if":
+                            this.condition(line);
+                            break;
 
-                    case "read":
-                        new StdLib.StdLib(line, vars).Read();
-                        break;
+                        case "read":
+                            new StdLib.StdLib(line, vars).Read();
+                            break;
 
-                    case "dim":
-                        vars.Dim(line);
-                        break;
+                        case "dim":
+                            vars.Dim(line);
+                            break;
 
-                    case "var":
-                        vars.varOpt(line);
-                        break;
+                        case "var":
+                            vars.varOpt(line);
+                            break;
 
-                    case "bool":
-                        vars.boolOpt(line);
-                        break;
+                        case "bool":
+                            vars.boolOpt(line);
+                            break;
 
-                    case "get":
-                        new StdLib.StdLib(line, vars).GetInput();
-                        break;
+                        case "get":
+                            new StdLib.StdLib(line, vars).GetInput();
+                            break;
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                Console.Title = "Atom -- ERROR";
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\nOops! Atom has detected an error occured in your source file.");
+                Console.WriteLine("> ERROR: " + line + " <");
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Environment.Exit(0);
             }
         }
     }

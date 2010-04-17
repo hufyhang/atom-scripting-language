@@ -33,11 +33,17 @@ namespace Formatter
             String temp = null;
             while ((temp = reader.ReadLine()) != null)
             {
-                while (temp[0] == '\t' || temp[0] == ' ')
+                try
                 {
-                    temp = temp.Remove(0, 1);
+                    while (temp[0] == '\t' || temp[0] == ' ')
+                    {
+                        temp = temp.Remove(0, 1);
+                    }
+                    this.content.Add(temp);
                 }
-                this.content.Add(temp);
+                catch (IndexOutOfRangeException)
+                {
+                }
             }
             reader.Close();
         }
