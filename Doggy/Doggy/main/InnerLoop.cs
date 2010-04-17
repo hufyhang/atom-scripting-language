@@ -28,7 +28,7 @@ namespace Doggy.main
 
             if (combineBegin <= combineEnd)
             {
-                for (int index = combineBegin; index != combineEnd; ++index)
+                for (int index = combineBegin; index <= combineEnd; ++index)
                 {
                     foreach (String str in devideStatements.GetStamentsList())
                     {
@@ -38,7 +38,7 @@ namespace Doggy.main
             }
             else
             {
-                for (int index = combineBegin; index != combineEnd; --index)
+                for (int index = combineBegin; index <= combineEnd; --index)
                 {
                     foreach (String str in devideStatements.GetStamentsList())
                     {

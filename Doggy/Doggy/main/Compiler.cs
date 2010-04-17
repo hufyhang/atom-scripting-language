@@ -46,8 +46,18 @@ namespace Doggy.main
             Boolean cond = false;
             String temp = line.Substring(3);
             int index = temp.IndexOf(',');
-            int condition = int.Parse(temp.Substring(0, 1));
-            temp = temp.Substring(index + 1);
+
+            String conditionStatement = temp.Substring(0, temp.IndexOf(","));
+            int condition = 0;
+            if (conditionStatement[0] == '&')
+            {
+                condition = variables.GetBool(conditionStatement.Substring(1));
+            }
+            else
+            {
+                condition = int.Parse(conditionStatement);
+            }
+            
             if (condition == TURE)
             {
                 cond = true;
@@ -58,7 +68,7 @@ namespace Doggy.main
             }
             if (cond)
             {
-                this.translate(temp, variables);
+                this.translate(temp.Substring(temp.IndexOf(",") + 1), variables);
             }
         }
 
@@ -139,35 +149,45 @@ namespace Doggy.main
 
         public void translate(String line, VariableLib.VariableLib vars)
         {
-            if (line[0] != '@')
+            if (line[0] != '.')
             {
-                if (line.Substring(0, line.IndexOf(" ")) == "show")
+                switch (line.Substring(0, line.IndexOf(" ")))
                 {
-                    new StdLib.StdLib(line, vars).Show();
-                }
-                else if (line.Substring(0, line.IndexOf(" ")) == "showln")
-                {
-                    new StdLib.StdLib(line, vars).Showln();
-                }
-                else if (line.Substring(0, line.IndexOf(" ")) == "loop")
-                {
-                    this.Loop(line, this.innerLoop, true, vars);
-                }
-                else if (line.Substring(0, line.IndexOf(" ")) == "if")
-                {
-                    this.condition(line);
-                }
-                else if (line.Substring(0, line.IndexOf(" ")) == "read")
-                {
-                    new StdLib.StdLib(line, vars).Read();
-                }
-                else if (line.Substring(0, line.IndexOf(" ")) == "dim")
-                {
-                    vars.Dim(line);
-                }
-                else if (line.Substring(0, line.IndexOf(" ")) == "var")
-                {
-                    vars.varOpt(line);
+                    case "show":
+                        new StdLib.StdLib(line, vars).Show();
+                        break;
+
+                    case "showln":
+                        new StdLib.StdLib(line, vars).Showln();
+                        break;
+
+                    case "loop":
+                        this.Loop(line, this.innerLoop, true, vars);
+                        break;
+
+                    case "if":
+                        this.condition(line);
+                        break;
+
+                    case "read":
+                        new StdLib.StdLib(line, vars).Read();
+                        break;
+
+                    case "dim":
+                        vars.Dim(line);
+                        break;
+
+                    case "var":
+                        vars.varOpt(line);
+                        break;
+
+                    case "bool":
+                        vars.boolOpt(line);
+                        break;
+
+                    case "get":
+                        new StdLib.StdLib(line, vars).GetInput();
+                        break;
                 }
             }
         }

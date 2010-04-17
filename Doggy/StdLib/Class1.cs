@@ -36,10 +36,15 @@ namespace StdLib
                     line = line.Substring(1);
                     Console.Write(this.variables.GetInt(line));
                 }
-                else
+                else if (line[0] == '%')
                 {
                     line = line.Substring(1);
                     Console.Write(this.variables.GetString(line));
+                }
+                else if (line[0] == '&')
+                {
+                    line = line.Substring(1);
+                    Console.Write(this.variables.GetBool(line));
                 }
             }
         }
@@ -59,21 +64,55 @@ namespace StdLib
                     line = line.Substring(1);
                     Console.WriteLine(this.variables.GetInt(line));
                 }
-                else
+                else if (line[0] == '%')
                 {
                     line = line.Substring(1);
                     Console.WriteLine(this.variables.GetString(line));
                 }
+                else if (line[0] == '&')
+                {
+                    line = line.Substring(1);
+                    Console.WriteLine(this.variables.GetBool(line));
+                }
+            }
+        }
+
+        public void GetInput()
+        {
+            String input = Console.ReadLine();
+            String temp = line.Substring(4);
+            if (temp[0] == '$')
+            {
+                variables.setInt(temp.Substring(1), int.Parse(input));
+            }
+            else if(temp[0] == '%')
+            {
+                variables.setString(temp.Substring(1), input);
             }
         }
 
         public void Read()
         {
-            String temp = line.Substring(6);
-            temp = temp.Substring(0, temp.Length - 1);
-            StreamReader reader = new StreamReader(temp);
-            Console.WriteLine(reader.ReadToEnd());
-            reader.Close();
+            String temp = line.Substring(5);
+            if (temp[0] == '%')
+            {
+                temp = variables.GetString(temp.Substring(1));
+            }
+            else
+            {
+                temp = temp.Substring(1, temp.Length - 1);
+            }
+            try
+            {
+                StreamReader reader = new StreamReader(temp);
+                Console.WriteLine(reader.ReadToEnd());
+                reader.Close();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("ERROR: Cannot read \"" + temp + "\"!");
+            }
         }
     }
 }
+;
