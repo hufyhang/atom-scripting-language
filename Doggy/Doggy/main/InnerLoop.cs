@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Collections;
 
-namespace Doggy.main
+namespace Atom.main
 {
     class InnerLoop
     {
@@ -18,7 +18,6 @@ namespace Doggy.main
             this.end = end;
             this.statements = new ArrayList();
             this.variables = variables;
-//            this.AddStatement("@");
         }
 
         public void combineStatements(InnerLoop devideStatements)
@@ -28,7 +27,7 @@ namespace Doggy.main
 
             if (combineBegin <= combineEnd)
             {
-                for (int index = combineBegin; index <= combineEnd; ++index)
+                for (int index = combineBegin; index != combineEnd; ++index)
                 {
                     foreach (String str in devideStatements.GetStamentsList())
                     {
@@ -38,7 +37,7 @@ namespace Doggy.main
             }
             else
             {
-                for (int index = combineBegin; index <= combineEnd; --index)
+                for (int index = combineBegin; index != combineEnd; --index)
                 {
                     foreach (String str in devideStatements.GetStamentsList())
                     {

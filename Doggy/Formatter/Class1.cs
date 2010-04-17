@@ -29,7 +29,21 @@ namespace Formatter
 
         protected void readIn()
         {
-            StreamReader reader = new StreamReader(this.file);
+            StreamReader reader = null;
+            try
+            {
+                reader = new StreamReader(this.file);
+            }
+            catch (Exception)
+            {
+                Console.Title = "Atom -- ERROR";
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\nOops! Atom has detected an error occured in your source file.");
+                Console.WriteLine("> ACCESS ERROR: Cannot access " + this.file + " <");
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Environment.Exit(0);
+            }
+
             String temp = null;
             while ((temp = reader.ReadLine()) != null)
             {

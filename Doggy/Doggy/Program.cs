@@ -19,7 +19,9 @@ namespace Doggy
             else
             {
                 Console.Title = "Atom -- " + args[0];
-                new main.Compiler(args).Compile();
+                Console.ForegroundColor = ConsoleColor.White;
+                new Atom.main.Compiler(args).Compile();
+                Console.ForegroundColor = ConsoleColor.Gray;
             }
         }
     }

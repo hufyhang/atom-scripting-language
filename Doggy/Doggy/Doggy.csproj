@@ -36,6 +36,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="core\core.cs" />
     <Compile Include="main\Compiler.cs" />
     <Compile Include="main\InnerLoop.cs" />
     <Compile Include="Program.cs" />

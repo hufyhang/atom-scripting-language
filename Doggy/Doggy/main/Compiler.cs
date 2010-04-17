@@ -6,10 +6,11 @@ using System.Collections;
 using StdLib;
 using Formatter;
 
-namespace Doggy.main
+namespace Atom.main
 {
     class Compiler
     {
+        private String sourceFile = null;
         private String line = null;
         private StreamReader reader;
         private VariableLib.VariableLib variables = new VariableLib.VariableLib();
@@ -17,8 +18,17 @@ namespace Doggy.main
 
         public Compiler() { }
 
+        public Compiler(String args)
+        {
+            this.sourceFile = args;
+            new Formatter.Formatter(args).Execute();
+            this.innerLoop = new InnerLoop(0, 0, this.variables);
+            reader = new StreamReader(args + @".atom");
+        }
+
         public Compiler(string[] args)
         {
+            this.sourceFile = args[0];
             new Formatter.Formatter(args[0]).Execute();
             this.innerLoop = new InnerLoop(0, 0, this.variables);
             reader = new StreamReader(args[0] + @".atom");
@@ -39,114 +49,6 @@ namespace Doggy.main
             reader.Close();
         }
 
-        protected void condition(String line)
-        {
-            int TURE = 1;
-            int FALES = 0;
-            Boolean cond = false;
-            String temp = line.Substring(3);
-            int index = temp.IndexOf(',');
-
-            String conditionStatement = temp.Substring(0, temp.IndexOf(","));
-            int condition = 0;
-            if (conditionStatement[0] == '&')
-            {
-                condition = variables.GetBool(conditionStatement.Substring(1));
-            }
-            else
-            {
-                condition = int.Parse(conditionStatement);
-            }
-            
-            if (condition == TURE)
-            {
-                cond = true;
-            }
-            else if (condition == FALES)
-            {
-                cond = false;
-            }
-            if (cond)
-            {
-                this.translate(temp.Substring(temp.IndexOf(",") + 1), variables);
-            }
-        }
-
-        protected ArrayList getLoopInformation(String line)
-        {
-            ArrayList result = new ArrayList();
-            String temp = line.Substring(5);
-            if (temp[0] == '$')
-            {
-                result.Add(variables.GetInt(temp.Substring(1, temp.IndexOf(",") - 1)));
-            }
-            else
-            {
-                result.Add(temp.Substring(0, temp.IndexOf(",")));
-            }
-            temp = temp.Substring(temp.IndexOf(",") + 1);
-            if (temp[0] == '$')
-            {
-                result.Add(variables.GetInt(temp.Substring(1, temp.IndexOf(",") - 1)));
-            }
-            else
-            {
-                result.Add(temp.Substring(0, temp.IndexOf(",")));
-            }
-            result.Add(temp.Substring(temp.IndexOf(",") + 1));
-            return result;
-        }
-
-        protected void Loop(String line, InnerLoop baseLoopStatements, Boolean baseLoop, VariableLib.VariableLib variables)
-        {
-            ArrayList information = this.getLoopInformation(line);
-
-            int begin = int.Parse(information[0].ToString());
-            int end = int.Parse(information[1].ToString());
-            String temp = information[2].ToString();
-            if (baseLoop)
-            {
-                baseLoopStatements = new InnerLoop(begin, end, variables);
-                begin = end = 0;
-            }
-
-            InnerLoop devideLoopStatements = new InnerLoop(begin, end, variables);
-
-            if (temp[0] != '{')
-            {
-                baseLoopStatements.AddStatement(temp);
-            }
-            else
-            {
-                while ((temp = reader.ReadLine()) != "}")
-                {
-                    if (temp.Substring(0, line.IndexOf(" ")) != "loop")
-                    {
-                        if (baseLoop)
-                        {
-                            baseLoopStatements.AddStatement(temp);
-                        }
-                        else
-                        {
-                            devideLoopStatements.AddStatement(temp);
-                        }
-                    }
-                    else
-                    {
-                        this.Loop(temp, baseLoopStatements, false, variables);
-                    }
-                }
-            }
-            if (baseLoop)
-            {
-                baseLoopStatements.Execute(variables);
-            }
-            else
-            {
-                baseLoopStatements.combineStatements(devideLoopStatements);
-            }
-        }
-
         public void translate(String line, VariableLib.VariableLib vars)
         {
             try
@@ -156,23 +58,23 @@ namespace Doggy.main
                     switch (line.Substring(0, line.IndexOf(" ")))
                     {
                         case "show":
-                            new StdLib.StdLib(line, vars).Show();
+                            new StdLib.StdLib(line, vars, this.sourceFile).Show();
                             break;
 
                         case "showln":
-                            new StdLib.StdLib(line, vars).Showln();
+                            new StdLib.StdLib(line, vars, this.sourceFile).Showln();
                             break;
 
                         case "loop":
-                            this.Loop(line, this.innerLoop, true, vars);
+                            new Atom.core.core(this).Loop(line, this.innerLoop, true, vars, this.reader);
                             break;
 
                         case "if":
-                            this.condition(line);
+                            new Atom.core.core(this).Condition(line, vars);
                             break;
 
                         case "read":
-                            new StdLib.StdLib(line, vars).Read();
+                            new StdLib.StdLib(line, vars, this.sourceFile).Read();
                             break;
 
                         case "dim":
@@ -188,16 +90,24 @@ namespace Doggy.main
                             break;
 
                         case "get":
-                            new StdLib.StdLib(line, vars).GetInput();
+                            new StdLib.StdLib(line, vars, this.sourceFile).GetInput();
+                            break;
+
+                        case "while":
+                            new Atom.core.core(this).WhileLoop(line, vars, this.reader);
+                            break;
+
+                        case "atom":
+                            new Atom.core.core(this).InnerAtom(line, vars);
                             break;
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 Console.Title = "Atom -- ERROR";
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("\nOops! Atom has detected an error occured in your source file.");
+                Console.WriteLine("\nOops! Atom has detected an error occured in " + this.sourceFile + "!");
                 Console.WriteLine("> ERROR: " + line + " <");
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Environment.Exit(0);

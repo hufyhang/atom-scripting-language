@@ -7,16 +7,13 @@ namespace StdLib
 {
     public class StdLib
     {
+        private String sourceFile = null;
         private String line = null;
         private VariableLib.VariableLib variables;
-/*
-        public StdLib(String line)
+
+        public StdLib(String line, VariableLib.VariableLib variables, String sourceFile)
         {
-            this.line = line;
-        }
-*/
-        public StdLib(String line, VariableLib.VariableLib variables)
-        {
+            this.sourceFile = sourceFile;
             this.line = line;
             this.variables = variables;
         }
@@ -112,7 +109,7 @@ namespace StdLib
             {
                 Console.Title = "Atom -- ERROR";
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("\nOops! Atom has detected an error occured in your source file.");
+                Console.WriteLine("\nOops! Atom has detected an error occured in " + this.sourceFile + "!");
                 Console.WriteLine("> FILESTREAM ERROR: " + line + " <");
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Environment.Exit(0);

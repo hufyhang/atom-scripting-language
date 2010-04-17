@@ -195,7 +195,6 @@ namespace VariableLib
             }
         }
 
-
         protected void varMathOpt(String name, char opt, String tar)
         {
             int target = int.Parse(tar);
