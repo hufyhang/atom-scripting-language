@@ -9,18 +9,20 @@ namespace Atom.main
     {
         private int begin;
         private int end;
+        private String endName;
         private ArrayList statements;
         private VariableLib.VariableLib variables;
 
-        public InnerLoop(int begin, int end, VariableLib.VariableLib variables)
+        public InnerLoop(int begin, int end, String endName, VariableLib.VariableLib variables)
         {
             this.begin = begin;
             this.end = end;
+            this.endName = endName;
             this.statements = new ArrayList();
             this.variables = variables;
         }
 
-        public void combineStatements(InnerLoop devideStatements)
+        public void CombineStatements(InnerLoop devideStatements)
         {
             int combineBegin = devideStatements.GetBegin();
             int combineEnd = devideStatements.GetEnd();
@@ -76,21 +78,33 @@ namespace Atom.main
         {
             if (this.begin <= this.end)
             {
-                for (int index = this.begin; index != this.end; ++index)
+                int index = this.begin;
+                while (index != this.end)
                 {
                     foreach (String str in this.statements)
                     {
                         new Compiler().translate(str, variables);
                     }
+                    ++index;
+                    if (this.endName != " ")
+                    {
+                        this.end = variables.GetInt(this.endName);
+                    }
                 }
             }
             else
             {
-                for (int index = this.begin; index != this.end; --index)
+                int index = this.begin;
+                while (index != this.end)
                 {
                     foreach (String str in this.statements)
                     {
                         new Compiler().translate(str, variables);
+                    }
+                    --index;
+                    if (this.endName != " ")
+                    {
+                        this.end = variables.GetInt(this.endName);
                     }
                 }
             }

@@ -63,10 +63,12 @@ namespace Atom.core
             temp = temp.Substring(temp.IndexOf(",") + 1);
             if (temp[0] == '$')
             {
+                result.Add(temp.Substring(1, temp.IndexOf(",") - 1));
                 result.Add(variables.GetInt(temp.Substring(1, temp.IndexOf(",") - 1)));
             }
             else
             {
+                result.Add(" ");
                 result.Add(temp.Substring(0, temp.IndexOf(",")));
             }
             result.Add(temp.Substring(temp.IndexOf(",") + 1));
@@ -125,15 +127,16 @@ namespace Atom.core
             ArrayList information = this.GetLoopInformation(line, variables);
 
             int begin = int.Parse(information[0].ToString());
-            int end = int.Parse(information[1].ToString());
-            String temp = information[2].ToString();
+            String endName = information[1].ToString();
+            int end = int.Parse(information[2].ToString());
+            String temp = information[3].ToString();
             if (baseLoop)
             {
-                baseLoopStatements = new Atom.main.InnerLoop(begin, end, variables);
+                baseLoopStatements = new Atom.main.InnerLoop(begin, end, endName,variables);
                 begin = end = 0;
             }
 
-            Atom.main.InnerLoop devideLoopStatements = new Atom.main.InnerLoop(begin, end, variables);
+            Atom.main.InnerLoop devideLoopStatements = new Atom.main.InnerLoop(begin, end, endName, variables);
 
             if (temp[0] != '{')
             {
@@ -166,7 +169,7 @@ namespace Atom.core
             }
             else
             {
-                baseLoopStatements.combineStatements(devideLoopStatements);
+                baseLoopStatements.CombineStatements(devideLoopStatements);
             }
         }
     }

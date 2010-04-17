@@ -22,7 +22,7 @@ namespace Atom.main
         {
             this.sourceFile = args;
             new Formatter.Formatter(args).Execute();
-            this.innerLoop = new InnerLoop(0, 0, this.variables);
+            this.innerLoop = new InnerLoop(0, 0, " ", this.variables);
             reader = new StreamReader(args + @".atom");
         }
 
@@ -30,7 +30,7 @@ namespace Atom.main
         {
             this.sourceFile = args[0];
             new Formatter.Formatter(args[0]).Execute();
-            this.innerLoop = new InnerLoop(0, 0, this.variables);
+            this.innerLoop = new InnerLoop(0, 0, " ", this.variables);
             reader = new StreamReader(args[0] + @".atom");
         }
 
@@ -109,9 +109,11 @@ namespace Atom.main
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("\nOops! Atom has detected an error occured in " + this.sourceFile + "!");
                 Console.WriteLine("> ERROR: " + line + " <");
+                Console.WriteLine(e.ToString());
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Environment.Exit(0);
             }
         }
     }
+
 }
