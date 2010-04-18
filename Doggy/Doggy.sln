@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doggy", "Doggy\Doggy.csproj", "{20FF3714-2C83-4FAB-84C0-1C2F7628B3E3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atom", "Doggy\Atom.csproj", "{20FF3714-2C83-4FAB-84C0-1C2F7628B3E3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StdLib", "StdLib\StdLib.csproj", "{06CB9814-5B47-4FF5-A486-AF738CC73999}"
 EndProject
