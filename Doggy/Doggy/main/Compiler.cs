@@ -15,12 +15,14 @@ namespace Atom.main
         private StreamReader reader;
         private VariableLib.VariableLib variables = new VariableLib.VariableLib();
         private InnerLoop innerLoop;
+        private ArrayList externalData = null;
 
         public Compiler() { }
 
-        public Compiler(String args)
+        public Compiler(String args, ArrayList externalData)
         {
             this.sourceFile = args;
+            this.externalData = externalData;
             new Formatter.Formatter(args).Execute();
             this.innerLoop = new InnerLoop(0, 0, " ", this.variables);
             reader = new StreamReader(args + @".atom");
@@ -99,6 +101,10 @@ namespace Atom.main
 
                         case "atom":
                             new Atom.core.core(this).InnerAtom(line, vars);
+                            break;
+
+                        case "external":
+                            new Atom.core.core(this).ExternalData(line, vars, this.externalData);
                             break;
                     }
                 }

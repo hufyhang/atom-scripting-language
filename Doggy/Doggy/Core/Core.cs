@@ -111,14 +111,58 @@ namespace Atom.core
         public void InnerAtom(String line, VariableLib.VariableLib variables)
         {
             line = line.Substring(5);
-            if (line[0] == '\"')
+            ArrayList data = new ArrayList();
+            String[] args = line.Split(',');
+            String atom = null;
+
+            if (args[0][0] == '\"')
             {
-                line = line.Substring(1, line.Length - 2);
-                new Atom.main.Compiler(line).Compile();
+                atom = args[0].Substring(1,args[0].Length - 2);
             }
-            else if (line[0] == '%')
+            else if (args[0][0] == '%')
             {
-                new Atom.main.Compiler(variables.GetString(line.Substring(1))).Compile();
+                atom = variables.GetString(args[0].Substring(1));
+            }
+
+            for (int index = 1; index != args.Length; ++index)
+            {
+                switch (args[index][0])
+                {
+                    case '$':
+                        data.Add(variables.GetInt(args[index].Substring(1)));
+                        break;
+
+                    case '%':
+                        data.Add(variables.GetString(args[index].Substring(1)));
+                        break;
+
+                    default:
+                        data.Add(args[index]);
+                        break;
+                }
+            }
+
+            new Atom.main.Compiler(atom, data).Compile();
+        }
+
+        public void ExternalData(String line, VariableLib.VariableLib variables, ArrayList externalData)
+        {
+            line = line.Substring(9);
+            String[] vars = line.Split(',');
+            int index = 0;
+            foreach (String var in vars)
+            {
+                switch (var[0])
+                {
+                    case '$':
+                        variables.setInt(var.Substring(1), int.Parse(externalData[index].ToString()));
+                        break;
+
+                    case '%':
+                        variables.setString(var.Substring(1), externalData[index].ToString());
+                        break;
+                }
+                ++index;
             }
         }
 

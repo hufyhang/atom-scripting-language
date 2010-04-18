@@ -39,7 +39,7 @@ namespace Formatter
                 Console.Title = "Atom -- ERROR";
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("\nOops! Atom has detected an error occured in your source file.");
-                Console.WriteLine("> ACCESS ERROR: Cannot access " + this.file + " <");
+                Console.WriteLine("> ACCESS ERROR: Cannot access \"" + this.file + "\" <");
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Environment.Exit(0);
             }
