@@ -12,7 +12,7 @@ namespace Atom
             {
                 Console.Title = "Atom -- No input file";
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Doggy: no input file");
+                Console.WriteLine("Atom: no input file");
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Environment.Exit(0);
             }

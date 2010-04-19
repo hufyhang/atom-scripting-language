@@ -11,6 +11,8 @@ namespace Formatter
         private FileInfo fileInfo;
         private ArrayList content;
         private String file;
+        private StreamReader reader;
+        private StreamWriter writer;
 
         public Formatter(String file)
         {
@@ -29,10 +31,9 @@ namespace Formatter
 
         protected void readIn()
         {
-            StreamReader reader = null;
             try
             {
-                reader = new StreamReader(this.file);
+                this.reader = new StreamReader(this.file);
             }
             catch (Exception)
             {
@@ -45,7 +46,7 @@ namespace Formatter
             }
 
             String temp = null;
-            while ((temp = reader.ReadLine()) != null)
+            while ((temp = this.reader.ReadLine()) != null)
             {
                 try
                 {
@@ -59,23 +60,23 @@ namespace Formatter
                 {
                 }
             }
-            reader.Close();
         }
 
         protected void output()
         {
-            StreamWriter writer = new StreamWriter(this.file + @".atom");
+            this.writer = new StreamWriter(this.file + @".atom");
             foreach (String str in this.content)
             {
-                writer.WriteLine(str);
+                this.writer.WriteLine(str);
             }
-            writer.Close();
         }
 
         public void Execute()
         {
             this.readIn();
+            this.reader.Close();
             this.output();
+            this.writer.Close();
         }
     }
 }
